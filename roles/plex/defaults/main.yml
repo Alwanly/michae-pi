@@ -2,7 +2,7 @@
 # ------------------------------------------------------------------------------
 # Plex
 # Media server!!
-michae:
+ritsu:
   components:
     plex:
       # docker image to run

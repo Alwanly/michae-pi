@@ -4,4 +4,4 @@
     state: started
     restart: true
     name: dnscrypt
-    image: "{{ michae.components.dnscrypt.image }}"
+    image: "{{ ritsu.components.dnscrypt.image }}"

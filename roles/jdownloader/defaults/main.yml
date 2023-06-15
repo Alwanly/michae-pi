@@ -5,7 +5,7 @@
 #
 # Note:
 # You'll need MyJDownloader account to access the download queue.
-michae:
+ritsu:
   components:
     jdownloader:
       # docker image to run

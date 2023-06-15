@@ -14,7 +14,7 @@
 #
 # Note:
 # cAdvisor will collect data from all docker containers.
-michae:
+ritsu:
   components:
     exporter_cadvisor:
       # image to run in Docker

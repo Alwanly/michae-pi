@@ -2,7 +2,7 @@
 # ------------------------------------------------------------------------------
 # Grafana
 # Visualization tool.
-michae:
+ritsu:
   components:
     grafana:
       # docker image to run

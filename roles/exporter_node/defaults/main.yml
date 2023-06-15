@@ -12,7 +12,7 @@
 #
 # Note:
 # Node exporter will be installed in your pi, not in Docker.
-michae:
+ritsu:
   components:
     exporter_node:
       # exporter version and architecture

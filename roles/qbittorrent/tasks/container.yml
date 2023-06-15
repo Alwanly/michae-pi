@@ -1,24 +1,24 @@
 ---
 - name: Pull image from registry
   community.docker.docker_image:
-    name: "{{ michae.components.qbittorrent.image }}"
+    name: "{{ ritsu.components.qbittorrent.image }}"
     source: pull
 
 - name: Start and connect container to network
   community.docker.docker_container:
     state: started
     name: qbittorrent
-    image: "{{ michae.components.qbittorrent.image }}"
+    image: "{{ ritsu.components.qbittorrent.image }}"
     restart_policy: unless-stopped
     env:
-      TZ: "{{ michae.timezone }}"
-      WEBUI_PORT: "{{ michae.components.qbittorrent.port }}"
+      TZ: "{{ ritsu.timezone }}"
+      WEBUI_PORT: "{{ ritsu.components.qbittorrent.port }}"
     published_ports:
-      - "{{ michae.components.qbittorrent.port }}:{{ michae.components.qbittorrent.port }}"
+      - "{{ ritsu.components.qbittorrent.port }}:{{ ritsu.components.qbittorrent.port }}"
       - 6881:6881
       - 6881:6881/udp
     networks:
-      - name: "{{ michae.network.name }}"
+      - name: "{{ ritsu.network.name }}"
     volumes:
-      - "{{ michae.config_dir }}/qbittorrent:/config"
-      - "{{ michae.components.qbittorrent.download_dir }}:/downloads"
+      - "{{ ritsu.config_dir }}/qbittorrent:/config"
+      - "{{ ritsu.components.qbittorrent.download_dir }}:/downloads"

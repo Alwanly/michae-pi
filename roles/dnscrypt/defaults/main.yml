@@ -7,7 +7,7 @@
 # This tool works best with pi-hole enabled too. You'll need to configure your
 # system's DNS to use the DNSCrypt server.
 # Edit the templates/dnscrypt.toml.j2 for more options.
-michae:
+ritsu:
   components:
     dnscrypt:
       # image to run in Docker

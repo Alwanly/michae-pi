@@ -35,8 +35,8 @@
     executable: /bin/bash
   become: true
   vars:
-    username: "{{ michae.components.samba.user.username }}"
-    password: "{{ michae.components.samba.user.password }}"
+    username: "{{ ritsu.components.samba.user.username }}"
+    password: "{{ ritsu.components.samba.user.password }}"
   no_log: true
   register: samba_create_users
   changed_when: "'Added user' in samba_create_users.stdout"

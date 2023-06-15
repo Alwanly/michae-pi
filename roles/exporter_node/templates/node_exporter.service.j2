@@ -9,7 +9,7 @@ After=network-online.target
 User=node-exporter
 Group=node-exporter
 Type=simple
-ExecStart={{ michae.components.exporter_node.install_path }} --web.listen-address=0.0.0.0:{{ michae.components.exporter_node.port }}
+ExecStart={{ ritsu.components.exporter_node.install_path }} --web.listen-address=0.0.0.0:{{ ritsu.components.exporter_node.port }}
 
 [Install]
 WantedBy=multi-user.target

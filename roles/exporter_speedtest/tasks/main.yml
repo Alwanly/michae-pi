@@ -1,18 +1,18 @@
 ---
 - name: Pull image from registry
   community.docker.docker_image:
-    name: "{{ michae.components.exporter_speedtest.image }}"
+    name: "{{ ritsu.components.exporter_speedtest.image }}"
     source: pull
 
 - name: Start and connect container to network
   community.docker.docker_container:
     state: started
     name: exporter_speedtest
-    image: "{{ michae.components.exporter_speedtest.image }}"
+    image: "{{ ritsu.components.exporter_speedtest.image }}"
     restart_policy: unless-stopped
     exposed_ports:
       - 9798:9798
     published_ports:
-      - "{{ michae.components.exporter_speedtest.port }}:9798"
+      - "{{ ritsu.components.exporter_speedtest.port }}:9798"
     networks:
-      - name: "{{ michae.network.name }}"
+      - name: "{{ ritsu.network.name }}"

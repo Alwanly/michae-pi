@@ -7,7 +7,7 @@
 # Note:
 # To expose a service from within docker containers, you can use the service name
 # as the hostname. You can also expose an IP address from your Pi.
-michae:
+ritsu:
   components:
     reverse_proxy:
       # image to run

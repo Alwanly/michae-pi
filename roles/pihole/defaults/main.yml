@@ -12,7 +12,7 @@
 #   prometheus server and a Grafana dashboard will be provisioned.
 #
 # More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
-michae:
+ritsu:
   components:
     pihole:
       # image to run

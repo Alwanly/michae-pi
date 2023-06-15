@@ -1,14 +1,14 @@
 ---
 - name: Clear import_dashboard directory
   ansible.builtin.file:
-    path: "{{ michae.config_dir }}/grafana/import_dashboards/*"
+    path: "{{ ritsu.config_dir }}/grafana/import_dashboards/*"
     state: absent
     force: true
 
 - name: Generate data source provisioning config
   ansible.builtin.template:
     src: templates/{{ item.src }}
-    dest: "{{ michae.config_dir }}/grafana/provisioning/{{ item.dest }}"
+    dest: "{{ ritsu.config_dir }}/grafana/provisioning/{{ item.dest }}"
     mode: "0777"
   notify: Restart Grafana
   loop:
@@ -17,32 +17,32 @@
 
 - name: Download Grafana dashboard JSON from Grafana Cloud
   ansible.builtin.command: |
-    curl -nc -s -f -o {{ michae.config_dir }}/grafana/import_dashboards/{{ item }}.json \
+    curl -nc -s -f -o {{ ritsu.config_dir }}/grafana/import_dashboards/{{ item }}.json \
       https://grafana.com/api/dashboards/{{ item }}/revisions/{{ revision }}/download
   vars:
     revision: "{{ lookup('ansible.builtin.url', 'https://grafana.com/api/dashboards/{{ item }}') | regex_search('\"revision\": ([0-9]+)', '\\1') | first }}"
   changed_when: true
-  loop: "{{ michae.components.grafana.dashboard_provisioning | default([]) }}"
+  loop: "{{ ritsu.components.grafana.dashboard_provisioning | default([]) }}"
 
-- name: Copy michae-Pi dashboards
+- name: Copy Ritsu-Pi dashboards
   ansible.builtin.copy:
     src: templates/dashboards/{{ item.name }}
-    dest: "{{ michae.config_dir }}/grafana/import_dashboards/{{ item.name }}"
+    dest: "{{ ritsu.config_dir }}/grafana/import_dashboards/{{ item.name }}"
     mode: "0777"
   notify: Restart Grafana
   when: item.copy
   loop:
     - name: docker_cadvisor.json
-      copy: "{{ michae.components.exporter_cadvisor.enabled }}"
+      copy: "{{ ritsu.components.exporter_cadvisor.enabled }}"
     - name: internet_uptime_blackbox.json
-      copy: "{{ michae.components.exporter_blackbox.enabled }}"
+      copy: "{{ ritsu.components.exporter_blackbox.enabled }}"
     - name: mikrotik_mktxp.json
-      copy: "{{ michae.components.exporter_mikrotik.enabled }}"
+      copy: "{{ ritsu.components.exporter_mikrotik.enabled }}"
     - name: node_exporter_full.json
-      copy: "{{ michae.components.exporter_node.enabled }}"
+      copy: "{{ ritsu.components.exporter_node.enabled }}"
     - name: node_exporter_summary.json
-      copy: "{{ michae.components.exporter_node.enabled }}"
+      copy: "{{ ritsu.components.exporter_node.enabled }}"
     - name: sensor_suhu_server.json
-      copy: "{{ michae.components.exporter_sensor_suhu_server.enabled }}"
+      copy: "{{ ritsu.components.exporter_sensor_suhu_server.enabled }}"
     - name: speedtest.json
-      copy: "{{ michae.components.exporter_speedtest.enabled }}"
+      copy: "{{ ritsu.components.exporter_speedtest.enabled }}"

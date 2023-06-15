@@ -1,7 +1,7 @@
 ---
 # ------------------------------------------------------------------------------
 # Portainer
-michae:
+ritsu:
   components:
     portainer:
       # docker image to run

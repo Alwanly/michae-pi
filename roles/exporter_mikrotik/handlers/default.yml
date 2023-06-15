@@ -4,4 +4,4 @@
     state: started
     restart: true
     name: exporter_mikrotik
-    image: "{{ michae.components.exporter_mikrotik.image }}"
+    image: "{{ ritsu.components.exporter_mikrotik.image }}"

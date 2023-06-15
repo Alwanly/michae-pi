@@ -2,11 +2,11 @@
 - name: Create docker network
   community.docker.docker_network:
     state: present
-    name: "{{ michae.network.name }}"
-    driver: "{{ michae.network.driver }}"
+    name: "{{ ritsu.network.name }}"
+    driver: "{{ ritsu.network.driver }}"
     ipam_config:
-      - subnet: "{{ michae.network.subnet }}"
-        gateway: "{{ michae.network.gateway }}"
+      - subnet: "{{ ritsu.network.subnet }}"
+        gateway: "{{ ritsu.network.gateway }}"
 
 - name: Reset connection so docker group is picked up.
   ansible.builtin.meta: reset_connection

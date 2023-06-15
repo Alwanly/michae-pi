@@ -5,7 +5,7 @@
 #
 # Note:
 # This will not be installed in Docker, but directly in your pi.
-michae:
+ritsu:
   components:
     samba:
       user:

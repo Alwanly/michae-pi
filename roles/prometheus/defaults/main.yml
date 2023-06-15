@@ -2,7 +2,7 @@
 # ------------------------------------------------------------------------------
 # Prometheus
 # Used to collect metrics from the system and acts as time series database.
-michae:
+ritsu:
   components:
     prometheus:
       image: prom/prometheus:v2.39.1

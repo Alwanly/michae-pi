@@ -3,7 +3,7 @@
 # qBittorrent
 # The best bittorrent client.
 # You can access the download queue from the web interface.
-michae:
+ritsu:
   components:
     qbittorrent:
       # image

@@ -15,7 +15,7 @@
 # This template only comes with minimal HTTP 2xx check. If you want to add more
 # checks, edit the template in the templates/config.yml.j2
 # Doc: https://github.com/prometheus/blackbox_exporter/blob/master/CONFIGURATION.md
-michae:
+ritsu:
   components:
     exporter_blackbox:
       # docker image to run

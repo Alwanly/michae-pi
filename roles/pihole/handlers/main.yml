@@ -4,4 +4,4 @@
     state: started
     restart: true
     name: pihole
-    image: "{{ michae.components.pihole.image }}"
+    image: "{{ ritsu.components.pihole.image }}"

@@ -2,12 +2,12 @@
 # --- copy key and cert
 - name: Check if private key is provided
   ansible.builtin.stat:
-    path: "{{ michae.components.reverse_proxy.ssl.key }}"
+    path: "{{ ritsu.components.reverse_proxy.ssl.key }}"
   register: nginx_ssl_key_provided
 
 - name: Check if certificate is provided
   ansible.builtin.stat:
-    path: "{{ michae.components.reverse_proxy.ssl.cert }}"
+    path: "{{ ritsu.components.reverse_proxy.ssl.cert }}"
   register: nginx_ssl_cert_provided
 
 - name: Copy the provided private key and certificate
@@ -16,22 +16,22 @@
     dest: "{{ item.dest }}"
     mode: "0600"
   loop:
-    - src: "{{ michae.config_dir }}/nginx/ssl/michae.crt"
-      dest: "{{ michae.config_dir }}/nginx/ssl/michae.crt"
-    - src: "{{ michae.components.reverse_proxy.ssl_key }}"
-      dest: "{{ michae.config_dir }}/nginx/ssl/michae.key"
+    - src: "{{ ritsu.config_dir }}/nginx/ssl/ritsu.crt"
+      dest: "{{ ritsu.config_dir }}/nginx/ssl/ritsu.crt"
+    - src: "{{ ritsu.components.reverse_proxy.ssl_key }}"
+      dest: "{{ ritsu.config_dir }}/nginx/ssl/ritsu.key"
   notify: Restart Nginx
   when: "nginx_ssl_key_provided.stat.exists and nginx_ssl_cert_provided.stat.exists"
 
 # ---- create key and cert
 - name: Check if private key is exists
   ansible.builtin.stat:
-    path: "{{ michae.config_dir }}/nginx/ssl/michae.key"
+    path: "{{ ritsu.config_dir }}/nginx/ssl/ritsu.key"
   register: nginx_ssl_key_exists
 
 - name: Check if certificate is provided
   ansible.builtin.stat:
-    path: "{{ michae.config_dir }}/nginx/ssl/michae.crt"
+    path: "{{ ritsu.config_dir }}/nginx/ssl/ritsu.crt"
   register: nginx_ssl_cert_exists
 
 - name: Check whether the ssl is orphaned

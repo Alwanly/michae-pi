@@ -4,4 +4,4 @@
     state: started
     restart: true
     name: prometheus
-    image: "{{ michae.components.prometheus.image }}"
+    image: "{{ ritsu.components.prometheus.image }}"

@@ -2,7 +2,7 @@
 # ------------------------------------------------------------------------------
 # Sensor Suhu Server
 # Simple ESP8266 + DHT11 sensor to monitor temperature and humidity
-michae:
+ritsu:
   components:
     exporter_sensor_suhu_server:
       # docker image to run

@@ -4,4 +4,4 @@
     state: started
     restart: true
     name: nginx
-    image: "{{ michae.components.reverse_proxy.image }}"
+    image: "{{ ritsu.components.reverse_proxy.image }}"

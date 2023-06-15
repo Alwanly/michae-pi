@@ -1,23 +1,23 @@
 ---
 - name: Pull image from registry
   community.docker.docker_image:
-    name: "{{ michae.components.jellyfin.image }}"
+    name: "{{ ritsu.components.jellyfin.image }}"
     source: pull
 
 - name: Start and connect container to network
   community.docker.docker_container:
     state: started
     name: jellyfin
-    image: "{{ michae.components.jellyfin.image }}"
+    image: "{{ ritsu.components.jellyfin.image }}"
     restart_policy: unless-stopped
     published_ports:
-      - "{{ michae.components.jellyfin.port }}:8096"
+      - "{{ ritsu.components.jellyfin.port }}:8096"
     networks:
-      - name: "{{ michae.network.name }}"
+      - name: "{{ ritsu.network.name }}"
     volumes:
-      - "{{ michae.config_dir }}/jellyfin/config:/config"
-      - "{{ michae.config_dir }}/jellyfin/cache:/cache"
+      - "{{ ritsu.config_dir }}/jellyfin/config:/config"
+      - "{{ ritsu.config_dir }}/jellyfin/cache:/cache"
     mounts:
-      - source: "{{ michae.components.jellyfin.media_dir }}"
+      - source: "{{ ritsu.components.jellyfin.media_dir }}"
         target: /media
         type: bind

@@ -3,16 +3,16 @@
   ansible.builtin.unarchive:
     src: >-
       https://github.com/prometheus/node_exporter/releases/download/
-      v{{ michae.components.exporter_node.version }}/
-      node_exporter-{{ michae.components.exporter_node.version }}.{{ michae.components.exporter_node.arch }}.tar.gz
+      v{{ ritsu.components.exporter_node.version }}/
+      node_exporter-{{ ritsu.components.exporter_node.version }}.{{ ritsu.components.exporter_node.arch }}.tar.gz
     dest: /tmp/
     remote_src: true
     validate_certs: false
 
 - name: Move node exporter binary to the final destination
   ansible.builtin.copy:
-    src: "/tmp/node_exporter-{{ michae.components.exporter_node.version }}.{{ michae.components.exporter_node.arch }}/node_exporter"
-    dest: "{{ michae.components.exporter_node.install_path }}"
+    src: "/tmp/node_exporter-{{ ritsu.components.exporter_node.version }}.{{ ritsu.components.exporter_node.arch }}/node_exporter"
+    dest: "{{ ritsu.components.exporter_node.install_path }}"
     owner: node-exporter
     group: node-exporter
     mode: "0775"
@@ -21,7 +21,7 @@
 
 - name: Clean temporary files
   ansible.builtin.file:
-    path: /tmp/node_exporter-{{ michae.components.exporter_node.version }}.{{ michae.components.exporter_node.arch }}/
+    path: /tmp/node_exporter-{{ ritsu.components.exporter_node.version }}.{{ ritsu.components.exporter_node.arch }}/
     state: absent
 
 - name: Install node exporter as service

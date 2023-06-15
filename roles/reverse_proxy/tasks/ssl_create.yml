@@ -1,7 +1,7 @@
 ---
 - name: Create Root CA private key
   community.crypto.openssl_privatekey:
-    path: "{{ michae.config_dir }}/nginx/ssl/michae_root_ca.key"
+    path: "{{ ritsu.config_dir }}/nginx/ssl/ritsu_root_ca.key"
     type: RSA
     size: 2048
     mode: "0600"
@@ -9,9 +9,9 @@
 
 - name: Create CSR for Root CA certificate
   community.crypto.openssl_csr:
-    path: "{{ michae.config_dir }}/nginx/ssl/michae_root_ca.csr"
-    privatekey_path: "{{ michae.config_dir }}/nginx/ssl/michae_root_ca.key"
-    common_name: "michae Pi CA"
+    path: "{{ ritsu.config_dir }}/nginx/ssl/ritsu_root_ca.csr"
+    privatekey_path: "{{ ritsu.config_dir }}/nginx/ssl/ritsu_root_ca.key"
+    common_name: "Ritsu Pi CA"
     organization_name: "Kodesiana"
     country_name: "ID"
     use_common_name_for_san: false
@@ -26,16 +26,16 @@
 
 - name: Create Root CA certificate
   community.crypto.x509_certificate:
-    path: "{{ michae.config_dir }}/nginx/ssl/michae_root_ca.crt"
-    csr_path: "{{ michae.config_dir }}/nginx/ssl/michae_root_ca.csr"
-    privatekey_path: "{{ michae.config_dir }}/nginx/ssl/michae_root_ca.key"
+    path: "{{ ritsu.config_dir }}/nginx/ssl/ritsu_root_ca.crt"
+    csr_path: "{{ ritsu.config_dir }}/nginx/ssl/ritsu_root_ca.csr"
+    privatekey_path: "{{ ritsu.config_dir }}/nginx/ssl/ritsu_root_ca.key"
     provider: selfsigned
     mode: "0600"
   notify: Restart Nginx
 
 - name: Create root domain private key
   community.crypto.openssl_privatekey:
-    path: "{{ michae.config_dir }}/nginx/ssl/michae.key"
+    path: "{{ ritsu.config_dir }}/nginx/ssl/ritsu.key"
     type: RSA
     size: 2048
     mode: "0600"
@@ -43,9 +43,9 @@
 
 - name: Create CSR for wildcard root domain
   community.crypto.openssl_csr:
-    path: "{{ michae.config_dir }}/nginx/ssl/michae.csr"
-    privatekey_path: "{{ michae.config_dir }}/nginx/ssl/michae.key"
-    common_name: "*.{{ michae.components.reverse_proxy.root_domain }}"
+    path: "{{ ritsu.config_dir }}/nginx/ssl/ritsu.csr"
+    privatekey_path: "{{ ritsu.config_dir }}/nginx/ssl/ritsu.key"
+    common_name: "*.{{ ritsu.components.reverse_proxy.root_domain }}"
     country_name: "ID"
     basic_constraints:
       - 'CA:FALSE'
@@ -55,19 +55,19 @@
       - keyEncipherment
       - dataEncipherment
     subject_alt_name:
-      - "DNS:{{ michae.components.reverse_proxy.root_domain }}"
-      - "DNS:*.{{ michae.components.reverse_proxy.root_domain }}"
+      - "DNS:{{ ritsu.components.reverse_proxy.root_domain }}"
+      - "DNS:*.{{ ritsu.components.reverse_proxy.root_domain }}"
     mode: "0600"
   notify: Restart Nginx
 
 - name: Create root domain certificate
   community.crypto.x509_certificate:
-    path: "{{ michae.config_dir }}/nginx/ssl/michae.crt"
-    csr_path: "{{ michae.config_dir }}/nginx/ssl/michae.csr"
-    privatekey_path: "{{ michae.config_dir }}/nginx/ssl/michae.key"
+    path: "{{ ritsu.config_dir }}/nginx/ssl/ritsu.crt"
+    csr_path: "{{ ritsu.config_dir }}/nginx/ssl/ritsu.csr"
+    privatekey_path: "{{ ritsu.config_dir }}/nginx/ssl/ritsu.key"
     provider: ownca
-    ownca_path: "{{ michae.config_dir }}/nginx/ssl/michae_root_ca.crt"
-    ownca_privatekey_path: "{{ michae.config_dir }}/nginx/ssl/michae_root_ca.key"
+    ownca_path: "{{ ritsu.config_dir }}/nginx/ssl/ritsu_root_ca.crt"
+    ownca_privatekey_path: "{{ ritsu.config_dir }}/nginx/ssl/ritsu_root_ca.key"
     ownca_not_after: "+8250d"
     ownca_not_before: "-1d"
     mode: "0600"
@@ -80,5 +80,5 @@
     mode: "0600"
     remote_src: true
   loop:
-    - src: "{{ michae.config_dir }}/nginx/ssl/michae_root_ca.crt"
-      dest: "{{ michae.config_dir }}/michae_root_ca.crt"
+    - src: "{{ ritsu.config_dir }}/nginx/ssl/ritsu_root_ca.crt"
+      dest: "{{ ritsu.config_dir }}/ritsu_root_ca.crt"

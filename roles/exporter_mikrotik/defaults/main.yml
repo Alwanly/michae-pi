@@ -9,7 +9,7 @@
 #   If prometheus is disabled, the play will fail.
 # - grafana
 #   If grafana is enabled, a dashboard will be provisioned.
-michae:
+ritsu:
   components:
     exporter_mikrotik:
       # image to run

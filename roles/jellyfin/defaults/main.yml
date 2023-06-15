@@ -2,7 +2,7 @@
 # ------------------------------------------------------------------------------
 # Jellyfin
 # Media server!!
-michae:
+ritsu:
   components:
     jellyfin:
       # docker image to run
