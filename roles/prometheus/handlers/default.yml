@@ -1,0 +1,7 @@
+---
+- name: Restart Prometheus
+  community.docker.docker_container:
+    state: started
+    restart: true
+    name: prometheus
+    image: "{{ michae.components.prometheus.image }}"

@@ -1,0 +1,15 @@
+---
+# ------------------------------------------------------------------------------
+# Jellyfin
+# Media server!!
+michae:
+  components:
+    jellyfin:
+      # docker image to run
+      image: jellyfin/jellyfin:10.8.10
+
+      # persistent dir
+      media_dir: /media/primary/movies
+
+      # external access
+      port: 8002

@@ -1,0 +1,28 @@
+---
+- name: Pull image from registry
+  community.docker.docker_image:
+    name: "{{ michae.components.plex.image }}"
+    source: pull
+
+- name: Start and connect container to network
+  community.docker.docker_container:
+    state: started
+    name: plex
+    image: "{{ michae.components.plex.image }}"
+    restart_policy: unless-stopped
+    env:
+      TZ: "{{ michae.timezone }}"
+      VERSION: "docker"
+      PLEX_CLAIM: "{{ michae.components.plex.claim_token }}"
+    published_ports:
+      - "{{ michae.components.plex.port }}:32400"
+    networks:
+      - name: "{{ michae.network.name }}"
+    volumes:
+      - "{{ michae.config_dir }}/plex:/config"
+    devices:
+      - /dev/dri:/dev/dri
+    mounts:
+      - source: "{{ michae.components.plex.media_dir }}"
+        target: /movies
+        type: bind

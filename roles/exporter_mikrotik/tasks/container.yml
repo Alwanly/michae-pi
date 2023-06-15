@@ -1,0 +1,20 @@
+---
+- name: Pull image from registry
+  community.docker.docker_image:
+    name: "{{ michae.components.exporter_mikrotik.image }}"
+    source: pull
+
+- name: Start and connect container to network
+  community.docker.docker_container:
+    state: started
+    name: exporter_mikrotik
+    image: "{{ michae.components.exporter_mikrotik.image }}"
+    restart_policy: unless-stopped
+    exposed_ports:
+      - 49090:49090
+    published_ports:
+      - "{{ michae.components.exporter_mikrotik.port }}:49090"
+    networks:
+      - name: "{{ michae.network.name }}"
+    volumes:
+      - "{{ michae.config_dir }}/exporter_mikrotik:/home/mktxp/mktxp"

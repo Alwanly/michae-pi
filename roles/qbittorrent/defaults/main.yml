@@ -1,0 +1,16 @@
+---
+# ------------------------------------------------------------------------------
+# qBittorrent
+# The best bittorrent client.
+# You can access the download queue from the web interface.
+michae:
+  components:
+    qbittorrent:
+      # image
+      image: lscr.io/linuxserver/qbittorrent:4.5.2
+
+      # web UI
+      port: 8006
+
+      # download directory
+      download_dir: /media/primary/downloads

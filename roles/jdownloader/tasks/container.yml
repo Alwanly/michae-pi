@@ -1,0 +1,27 @@
+---
+- name: Pull image from registry
+  community.docker.docker_image:
+    name: "{{ michae.components.jdownloader.image }}"
+    source: pull
+
+- name: Start and connect container to network
+  community.docker.docker_container:
+    state: started
+    name: jdownloader
+    image: "{{ michae.components.jdownloader.image }}"
+    restart_policy: unless-stopped
+    published_ports:
+      - "{{ michae.components.jdownloader.port }}:5800"
+      - 3129:3129
+    networks:
+      - name: "{{ michae.network.name }}"
+    env:
+      MYJDOWNLOADER_EMAIL: "{{ michae.components.jdownloader.email }}"
+      MYJDOWNLOADER_PASSWORD: "{{ michae.components.jdownloader.password }}"
+      MYJDOWNLOADER_DEVICE_NAME: "{{ michae.components.jdownloader.device }}"
+    volumes:
+      - "{{ michae.config_dir }}/jdownloader:/config"
+    mounts:
+      - source: "{{ michae.components.jdownloader.download_dir }}"
+        target: /output
+        type: bind

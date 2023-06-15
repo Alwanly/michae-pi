@@ -1,0 +1,42 @@
+---
+- name: Ensure dependencies are installed
+  ansible.builtin.apt:
+    name:
+      - samba
+      - samba-common
+    state: present
+    update_cache: false
+  become: true
+
+- name: Make sure samba is started
+  ansible.builtin.systemd:
+    name: smbd
+    state: started
+    enabled: true
+  become: true
+
+- name: Create samba config
+  ansible.builtin.template:
+    src: samba.conf.j2
+    dest: /etc/samba/smb.conf
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  notify: Restart Samba
+
+- name: Ensure samba user is installed
+  ansible.builtin.shell: >
+    set -o nounset -o pipefail -o errexit &&
+    (pdbedit --user={{ username }} 2>&1 > /dev/null) \
+    || (echo {{ password }}; echo {{ password }}) \
+    | smbpasswd -s -a {{ username }}
+  args:
+    executable: /bin/bash
+  become: true
+  vars:
+    username: "{{ michae.components.samba.user.username }}"
+    password: "{{ michae.components.samba.user.password }}"
+  no_log: true
+  register: samba_create_users
+  changed_when: "'Added user' in samba_create_users.stdout"
