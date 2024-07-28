@@ -1,0 +1,26 @@
+---
+- name: michae-pi Project
+  hosts: michae_pi
+  pre_tasks:
+    - name: Load configuration
+      ansible.builtin.include_vars:
+        file: config.yml
+
+  roles:
+    # # common
+    - role: common
+      tags: [common]
+    - role: docker
+      tags: [common, docker]
+
+
+    # networking
+    - role: dnscrypt
+      tags: [dnscrypt]
+      when: michae.components.dnscrypt.enabled == true
+    - role: pihole
+      tags: [pihole]
+      when: michae.components.pihole.enabled == true
+    - role: reverse_proxy
+      tags: [nginx]
+      when: michae.components.reverse_proxy.enabled == true

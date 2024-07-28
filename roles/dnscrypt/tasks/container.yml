@@ -1,0 +1,20 @@
+---
+- name: Pull image from registry
+  community.docker.docker_image:
+    name: "{{ michae.components.dnscrypt.image }}"
+    source: pull
+
+- name: Start and connect container to network
+  community.docker.docker_container:
+    state: started
+    name: dnscrypt
+    image: "{{ michae.components.dnscrypt.image }}"
+    restart_policy: unless-stopped
+    published_ports:
+      - "{{ michae.components.dnscrypt.bind_dns_port }}:5053/udp"
+      - "{{ michae.components.dnscrypt.bind_dns_port }}:5053/tcp"
+    networks:
+      - name: "{{ michae.network.name }}"
+        ipv4_address: "{{ michae.components.dnscrypt.bind_ip }}"
+    volumes:
+      - "{{  dnscrypt_config_dir.path }}/dnscrypt-proxy.toml:/dnscrypt-proxy.toml:ro"
