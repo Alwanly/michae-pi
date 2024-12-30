@@ -19,6 +19,7 @@
     published_ports:
       - 53:53/tcp
       - 53:53/udp
+      - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
       - "{{ michae.components.pihole.port }}:80/tcp"
     env:
       TZ: "{{ michae.timezone }}"

@@ -18,8 +18,8 @@ server {
   listen      [::]:443 ssl;
   server_name {{ item.subdomain }}.{{ root_domain }};
 
-  ssl_certificate        /etc/nginx/ssl/certs/michae.crt;
-  ssl_certificate_key    /etc/nginx/ssl/certs/michae.key;
+  ssl_certificate        /etc/nginx/ssl/michae.crt;
+  ssl_certificate_key    /etc/nginx/ssl/michae.key;
 
   location / {
     include    /etc/nginx/includes/proxy.conf;
