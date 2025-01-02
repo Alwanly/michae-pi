@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  shinobi:
+    image: shinobisystems/shinobi:latest
+    container_name: shinobi
+    ports:
+      - "8080:8080"
+    environment:
+      - MYSQL_HOST=your_existing_mysql_host
+      - MYSQL_ROOT_PASSWORD=yourpassword
+      - MYSQL_DATABASE=shinobi
+      - MYSQL_USER=shinobi
+      - MYSQL_PASSWORD=yourpassword
+    volumes:
+      - ./volumes/config:/config
+      - ./volumes/customAutoLoad:/home/Shinobi/libs/customAutoLoad
