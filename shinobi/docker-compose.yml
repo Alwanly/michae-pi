@@ -2,14 +2,32 @@ version: '3.8'
 
 services:
   shinobi:
-    image: shinobisystems/shinobi:latest
+    build:
+      context: .
+      args:
+        SHINOBI_BRANCH: master
     container_name: shinobi
     environment:
-      - MYSQL_HOST=your_existing_mysql_host
-      - MYSQL_ROOT_PASSWORD=yourpassword
-      - MYSQL_DATABASE=shinobi
-      - MYSQL_USER=shinobi
-      - MYSQL_PASSWORD=yourpassword
+      - HOME=/home/Shinobi
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASSWORD=example
+      - DB_DATABASE=shinobi
+      - SHINOBI_UPDATE=false
     volumes:
       - ./volumes/config:/config
       - ./volumes/customAutoLoad:/home/Shinobi/libs/customAutoLoad
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=example
+      - MYSQL_DATABASE=shinobi
+    volumes:
+      - mysql-data:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
