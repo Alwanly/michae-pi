@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    environment:
+      TZ: 'Asia/Jakarta'
+      WEBPASSWORD: 'baemon'
+      DNS1: 127.0.0.1#5053
+      DNS2: 127.0.0.1#5053
+    volumes:
+      - './volumes/pihole/etc-pihole:/etc/pihole'
+      - './volumes/pihole/etc-dnsmasq.d:/etc/dnsmasq.d'
+    ports:
+      # Remove the following line to prevent direct access
+      # - '9000:80'
+      - '53:53/tcp'
+      - '53:53/udp'
+    restart: unless-stopped
+    depends_on:
+      - dnscrypt-proxy
+
+  dnscrypt-proxy:
+    image: klutchell/dnscrypt-proxy:latest
+    container_name: dnscrypt-proxy
+    environment:
+      TZ: 'Asia/Jakarta'
+    ports:
+      - '5053:5053/tcp'
+      - '5053:5053/udp'
+    restart: unless-stopped
