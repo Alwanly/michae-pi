@@ -1,6 +1,0 @@
----
-michae_pi:
-  hosts:
-    michae:
-      ansible_host: 192.168.101.200
-      ansible_user: michae
