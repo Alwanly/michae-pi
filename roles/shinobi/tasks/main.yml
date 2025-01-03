@@ -43,6 +43,10 @@
       - name: "{{ docker_network.name }}"
     volumes:
       - "{{ shinobi_config_dir }}/config:/config"
+    labels:
+      flame.type: "application"
+      flame.name: "CCTV - Shinobi"
+      flame.url: "http://{{ flame_hostname }}:{{ shinobi_port }}"
+      flame.icon: "custom"
     state: "{{ 'started' if (shinobi_state == 'present') else 'absent' }}"
-  when: shinobi_mysql_container_info is defined
 

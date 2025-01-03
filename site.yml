@@ -13,7 +13,7 @@
     timezone: Asia/Jakarta
 
     # Flame dashboard
-    flame_hostname: 10.20.20.102
+    flame_hostname: 192.168.101.200
 
     # Docker
     docker_user:
@@ -32,6 +32,18 @@
       tags: [common]
       vars:
         common_config_static_ip: true
+
+    # ===> dashboard
+    - role: flame
+      tags: [common, dashboard]
+      vars:
+        flame_state: present
+
+        # docker image
+        flame_image: pawelmalak/flame:multiarch2.3.1
+
+        # default password
+        flame_password: "{{ flame_dashboard_password }}"
 
     # ===> networking
     - role: dnscrypt
