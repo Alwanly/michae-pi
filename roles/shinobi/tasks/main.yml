@@ -17,6 +17,42 @@
   register: shinobi_mysql_container_info
   when: shinobi_mysql
 
+- name: Check if database exists
+  mysql_db:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: "{{ shinobi_mysql_db }}"
+    state: present
+  register: shinobi_db_exists
+
+- name: Create database if it does not exist
+  mysql_db:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: "{{ shinobi_mysql_db }}"
+    state: present
+  when: not shinobi_db_exists.changed
+
+- name: Check if user exists
+  mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: "{{ shinobi_mysql_user }}"
+    host: "%"
+    state: present
+  register: shinobi_user_exists
+
+- name: Create user if it does not exist
+  mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: "{{ shinobi_mysql_user }}"
+    password: "{{ shinobi_mysql_password }}"
+    host: "%"
+    priv: "{{ shinobi_mysql_db }}.*:ALL"
+    state: present
+  when: not shinobi_user_exists.changed
+
 - name: Copy Dockerfile and entrypoint script
   ansible.builtin.copy:
     src: "{{ item.src }}"
