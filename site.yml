@@ -7,7 +7,7 @@
   vars:
     # Location where configuration files be stored.
     # Note: ALWAYS USE ABSOLUTE PATH
-    config_dir: /media/primary/michae-pi2
+    config_dir: /mnt/hdd/primary/michae-pi2
 
     # Timezone
     timezone: Asia/Jakarta
@@ -83,7 +83,7 @@
     - role: shinobi
       tags: [cctv,security, shinobi]
       vars:
-        shinobi_state: present
+        shinobi_state: absent
 
         # docker image
         shinobi_image: shinobi:latest
@@ -95,4 +95,17 @@
         shinobi_mysql: true
         shinobi_mysql_user: "{{ shinobi_mysql_user }}" # defined in secrets.yml
         shinobi_mysql_password: "{{ shinobi_mysql_password }}" # defined in secrets.yml
-        shinobi_mysql_db: shinobi
+        shinobi_mysql_db: db_shinobi
+
+    # ===> database
+    - role: mysql
+      tags: [database]
+      vars:
+        mysql_state:  absent
+
+        # docker image
+        mysql_image: mysql:8.0
+
+        # database root user
+        mysql_root_user: root
+        mysql_root_password: "{{ mysql_root_password }}" # defined in secrets.yml

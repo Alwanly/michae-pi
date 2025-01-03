@@ -1,0 +1,18 @@
+#!/bin/bash
+
+DB_CONFIG=$(cat <<EOF
+{
+    "host": "${DB_HOST}",
+    "user": "${DB_USER}",
+    "password": "${DB_PASSWORD}",
+    "database": "${DB_DATABASE}",
+    "port": 3306
+}
+EOF
+)
+echo "Setting Database"
+echo $DB_CONFIG
+
+node tools/modifyConfiguration.js addToConfig="{\"db\": $DB_CONFIG}"
+
+exec node camera.js

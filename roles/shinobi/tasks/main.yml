@@ -19,9 +19,10 @@
 
 - name: Build image from Dockerfile
   community.docker.docker_image:
-    state: "{{ shinobi_state }}"
     name: "{{ shinobi_image }}"
-    build: templates/Dockerfile
+    build:
+      path: templates
+      dockerfile: Dockerfile
     source: build
   register: shinobi_image_info
 
@@ -37,12 +38,13 @@
     env:
       DB_HOST: "{{ shinobi_mysql_container_info.container.NetworkSettings.Networks.mainnet.IPAddress | default('') }}"
       DB_USER: "{{ shinobi_mysql_user }}"
-      DB_PASS: "{{ shinobi_mysql_password }}"
-      DB_NAME: "{{ shinobi_mysql_db }}"
+      DB_PASSWORD: "{{ shinobi_mysql_password }}"
+      DB_DATABASE: "{{ shinobi_mysql_db }}"
     networks:
       - name: "{{ docker_network.name }}"
     volumes:
-      - "{{ shinobi_config_dir }}/config:/config"
+      - "{{ shinobi_config_dir }}/videos/:/home/Shinobi/videos/"
+      - "{{ shinobi_config_dir }}/tools/:/home/Shinobi/tools/"
     labels:
       flame.type: "application"
       flame.name: "CCTV - Shinobi"

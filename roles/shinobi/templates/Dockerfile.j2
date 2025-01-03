@@ -13,16 +13,18 @@ RUN apt-get update && apt-get install -y \
     procps \
     && rm -rf /var/lib/apt/lists/*  # Clean up to reduce image size
 
-RUN git clone --branch $SHINOBI_BRANCH https://gitlab.com/Shinobi-Systems/Shinobi.git /opt/shinobi
-
-WORKDIR /opt/shinobi
-RUN npm install && npm install pm2 -g
+RUN git clone --branch $SHINOBI_BRANCH https://gitlab.com/Shinobi-Systems/Shinobi.git /home/Shinobi
 
 WORKDIR /home/Shinobi
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN mv conf.sample.json conf.json && mv super.sample.json super.json
+
+RUN npm install
+
+COPY entrypoint.sh /start.sh
+RUN chmod +x /start.sh
 
 EXPOSE 8080
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/start.sh"]
+
