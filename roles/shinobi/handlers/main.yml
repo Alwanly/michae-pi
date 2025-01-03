@@ -1,0 +1,7 @@
+---
+- name: Restart Shinobi
+  community.docker.docker_container:
+    state: started
+    restart: true
+    name: shinobi
+    image: "{{ michae.components.shinobi.image }}"

@@ -1,0 +1,48 @@
+---
+- name: Create config directory
+  ansible.builtin.file:
+    path: "{{ config_dir }}/shinobi"
+    state: directory
+    mode: "0775"
+  register: shinobi_config_dir
+
+- name: Ensure shinobi_mysql is defined
+  ansible.builtin.fail:
+    msg: "shinobi_mysql is not defined"
+  when: shinobi_mysql is not defined
+
+- name: Get MySQL IP address
+  community.docker.docker_container_info:
+    name: mysql
+  register: shinobi_mysql_container_info
+  when: shinobi_mysql
+
+- name: Build image from Dockerfile
+  community.docker.docker_image:
+    state: "{{ shinobi_state }}"
+    name: "{{ shinobi_image }}"
+    build: templates/Dockerfile
+    source: build
+  register: shinobi_image_info
+
+- name: Start and connect container to network
+  community.docker.docker_container:
+    name: shinobi
+    image: "{{ shinobi_image }}"
+    recreate: true
+    user: "{{ docker_user.uid }}:{{ docker_user.gid }}"
+    restart_policy: unless-stopped
+    published_ports:
+      - "{{ shinobi_port }}:8080/tcp"
+    env:
+      DB_HOST: "{{ shinobi_mysql_container_info.container.NetworkSettings.Networks.mainnet.IPAddress | default('') }}"
+      DB_USER: "{{ shinobi_mysql_user }}"
+      DB_PASS: "{{ shinobi_mysql_password }}"
+      DB_NAME: "{{ shinobi_mysql_db }}"
+    networks:
+      - name: "{{ docker_network.name }}"
+    volumes:
+      - "{{ shinobi_config_dir }}/config:/config"
+    state: "{{ 'started' if (shinobi_state == 'present') else 'absent' }}"
+  when: shinobi_mysql_container_info is defined
+

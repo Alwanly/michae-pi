@@ -1,26 +1,86 @@
 ---
-- name: michae-pi Project
-  hosts: michae_pi
-  pre_tasks:
-    - name: Load configuration
-      ansible.builtin.include_vars:
-        file: config.yml
+- name: Michae PI Project
+  hosts: michae-pi
+  gather_facts: true
+  vars_files:
+    - secrets.yml
+  vars:
+    # Location where configuration files be stored.
+    # Note: ALWAYS USE ABSOLUTE PATH
+    config_dir: /media/primary/michae-pi2
+
+    # Timezone
+    timezone: Asia/Jakarta
+
+    # Flame dashboard
+    flame_hostname: 10.20.20.102
+
+    # Docker
+    docker_user:
+      uid: "1000"
+      gid: "1000"
+
+    docker_network:
+      name: michae_network
+      driver: bridge
+      subnet: "172.18.0.1/16"
+      gateway: "172.18.0.1"
 
   roles:
-    # # common
+    # ===> common
     - role: common
       tags: [common]
-    - role: docker
-      tags: [common, docker]
+      vars:
+        common_config_static_ip: true
 
-
-    # networking
+    # ===> networking
     - role: dnscrypt
-      tags: [dnscrypt]
-      when: michae.components.dnscrypt.enabled == true
+      tags: [networking, security, dnscrypt]
+      vars:
+        dnscrypt_state: present
+
+        # docker image
+        dnscrypt_image: klutchell/dnscrypt-proxy:v2.55.02.1.5
+
+        # internal docker network config
+        dnscrypt_bind_ip: "172.18.1.100"
+        dnscrypt_bind_dns_port: 54
+
+        # upstream DNS servers
+        dnscrypt_upstream_dns:
+          - cloudflare
+          - google
+
     - role: pihole
-      tags: [pihole]
-      when: michae.components.pihole.enabled == true
-    - role: reverse_proxy
-      tags: [nginx]
-      when: michae.components.reverse_proxy.enabled == true
+      tags: [networking, security, pihole]
+      vars:
+        pihole_state: present
+
+        # docker image
+        pihole_image: pihole/pihole:2024.07.0
+
+        # web UI access
+        pihole_port: 8003
+        pihole_password: "{{ pihole_password }}" # defined in secrets.yml
+
+        # enable DNSCrypt integration
+        # this config can only be enabled for first time installation
+        pihole_dnscrypt: true
+
+    # ===> cctv
+    - role: shinobi
+      tags: [cctv,security, shinobi]
+      vars:
+        shinobi_state: present
+
+        # docker image
+        shinobi_image: shinobi:latest
+
+        # web UI access
+        shinobi_port: 8004
+
+        # MySQL database
+        shinobi_mysql: true
+        shinobi_mysql_user: "{{ shinobi_mysql_user }}" # defined in secrets.yml
+        shinobi_mysql_password: "{{ shinobi_mysql_password }}" # defined in secrets.yml
+        shinobi_mysql_db: shinobi

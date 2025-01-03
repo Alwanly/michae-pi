@@ -1,0 +1,33 @@
+---
+- name: Create config directory
+  ansible.builtin.file:
+    path: "{{ config_dir }}/mysql"
+    state: directory
+    mode: "0775"
+  register: mysql_config_dir
+
+
+- name: Pull image from registry
+  community.docker.docker_image:
+    state: "{{ mysql_state }}"
+    name: "{{ mysql_image }}"
+    source: pull
+
+- name: Start and connect container to network
+  community.docker.docker_container:
+    name: mysql
+    image: "{{ mysql_image }}"
+    recreate: true
+
+    restart_policy: unless-stopped
+    published_ports:
+      - "{{ mysql_port }}:3306/tcp"
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
+      MYSQL_DATABASE: "{{ mysql_database }}"
+    networks:
+      - name: "{{ docker_network.name }}"
+    volumes:
+      - "{{ mysql_config_dir }}/:/var/lib/mysql"
+    state: "{{ 'started' if (mysql_state == 'present') else 'absent' }}"
+
