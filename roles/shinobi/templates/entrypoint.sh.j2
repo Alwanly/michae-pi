@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Ensure FFmpeg is available
+ffbinaries --install
+
 DB_CONFIG=$(cat <<EOF
 {
     "host": "${DB_HOST}",
