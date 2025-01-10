@@ -1,13 +1,13 @@
 ---
 - name: Michae PI Project
-  hosts: michae-pi
+  hosts: michae_pi
   gather_facts: true
   vars_files:
     - secrets.yml
   vars:
     # Location where configuration files be stored.
     # Note: ALWAYS USE ABSOLUTE PATH
-    config_dir: /mnt/hdd/primary/michae-pi2
+    config_dir: /media/primary/michae-pi
 
     # Timezone
     timezone: Asia/Jakarta
@@ -21,9 +21,9 @@
       gid: "1000"
 
     docker_network:
-      name: michae_network
+      name: mainnet
       driver: bridge
-      subnet: "172.18.0.1/16"
+      subnet: "172.18.0.0/16"
       gateway: "172.18.0.1"
 
   roles:
@@ -34,16 +34,16 @@
         common_config_static_ip: true
 
     # ===> dashboard
-    - role: flame
-      tags: [common, dashboard]
-      vars:
-        flame_state: present
+    # - role: flame
+    #   tags: [common, dashboard]
+    #   vars:
+    #     flame_state: present
 
-        # docker image
-        flame_image: pawelmalak/flame:multiarch2.3.1
+    #     # docker image
+    #     flame_image: pawelmalak/flame:multiarch2.3.1
 
-        # default password
-        flame_password: "{{ flame_dashboard_password }}"
+    #     # default password
+    #     flame_password: "{{ flame_dashboard_password }}"
 
     # ===> networking
     - role: dnscrypt
@@ -52,7 +52,7 @@
         dnscrypt_state: present
 
         # docker image
-        dnscrypt_image: klutchell/dnscrypt-proxy:v2.55.02.1.5
+        dnscrypt_image: klutchell/dnscrypt-proxy:latest
 
         # internal docker network config
         dnscrypt_bind_ip: "172.18.1.100"
@@ -73,39 +73,39 @@
 
         # web UI access
         pihole_port: 8003
-        pihole_password: "{{ pihole_password }}" # defined in secrets.yml
+        pihole_password: "{{ pihole_dashboard_password }}" # defined in secrets.yml
 
         # enable DNSCrypt integration
         # this config can only be enabled for first time installation
         pihole_dnscrypt: true
 
-    # ===> cctv
-    - role: shinobi
-      tags: [cctv,security, shinobi]
-      vars:
-        shinobi_state: absent
+    # # ===> cctv
+    # - role: shinobi
+    #   tags: [cctv,security, shinobi]
+    #   vars:
+    #     shinobi_state: absent
 
-        # docker image
-        shinobi_image: shinobi:latest
+    #     # docker image
+    #     shinobi_image: shinobi:latest
 
-        # web UI access
-        shinobi_port: 8004
+    #     # web UI access
+    #     shinobi_port: 8004
 
-        # MySQL database
-        shinobi_mysql: true
-        shinobi_mysql_user: "{{ shinobi_mysql_user }}" # defined in secrets.yml
-        shinobi_mysql_password: "{{ shinobi_mysql_password }}" # defined in secrets.yml
-        shinobi_mysql_db: db_shinobi
+    #     # MySQL database
+    #     shinobi_mysql: true
+    #     shinobi_mysql_user: "{{ shinobi_mysql_user }}" # defined in secrets.yml
+    #     shinobi_mysql_password: "{{ shinobi_mysql_password }}" # defined in secrets.yml
+    #     shinobi_mysql_db: db_shinobi
 
-    # ===> database
-    - role: mysql
-      tags: [database]
-      vars:
-        mysql_state:  absent
+    # # ===> database
+    # - role: mysql
+    #   tags: [database]
+    #   vars:
+    #     mysql_state:  absent
 
-        # docker image
-        mysql_image: mysql:8.0
+    #     # docker image
+    #     mysql_image: mysql:8.0
 
-        # database root user
-        mysql_root_user: root
-        mysql_root_password: "{{ mysql_root_password }}" # defined in secrets.yml
+    #     # database root user
+    #     mysql_root_user: root
+    #     mysql_root_password: "{{ mysql_root_password }}" # defined in secrets.yml

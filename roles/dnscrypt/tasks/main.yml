@@ -8,7 +8,7 @@
 
 - name: Create configuration
   ansible.builtin.template:
-    src: templates/dnscrypt-proxy.toml.j2
+    src: templates/dnscrypt.toml.j2
     dest: "{{ dnscrypt_config_dir.path }}/dnscrypt-proxy.toml"
     mode: "0775"
   notify: Restart DNSCrypt

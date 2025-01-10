@@ -26,6 +26,7 @@
     image: "{{ pihole_image }}"
     recreate: true
     # user: "{{ docker_user.uid }}:{{ docker_user.gid }}"
+    timeout: 300  # Increase the timeout value to 300 seconds
     restart_policy: unless-stopped
     capabilities:
       - NET_ADMIN
@@ -36,6 +37,7 @@
     published_ports:
       - 53:53/tcp
       - 53:53/udp
+      # - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
       - "{{ pihole_port }}:80/tcp"
     env:
       TZ: "{{ timezone }}"
@@ -49,11 +51,6 @@
     volumes:
       - "{{ config_dir }}/pihole/etc/:/etc/pihole/"
       - "{{ config_dir }}/pihole/dnsmasq.d/:/etc/dnsmasq.d/"
-    labels:
-      flame.type: "application"
-      flame.name: "Pi-Hole"
-      flame.url: "http://{{ flame_hostname }}:{{ pihole_port }}"
-      flame.icon: "custom"
     state: "{{ 'started' if (pihole_state == 'present') else 'absent' }}"
   vars:
     dnscrypt_enabled: "{{ pihole_dnscrypt }}"
